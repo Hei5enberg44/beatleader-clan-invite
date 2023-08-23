@@ -3,9 +3,7 @@ import chalk from 'chalk'
 (async () => {
     const COOKIE_VALUE = ''
     const COOKIE = `.AspNetCore.Cookies=${COOKIE_VALUE}; Expires=Tue, 1 Jan 2038 00:00:00 GMT; Domain=beatleader.xyz; Path=/`
-    const BLACKLIST = [
-        '76561198125542519'
-    ]
+    const BLACKLIST = []
 
     const getFRPlayers = async () => {
         let nextPage = 1
@@ -50,7 +48,7 @@ import chalk from 'chalk'
         })
 
         const result = await request.text()
-        console.log(result.ok ? chalk.green(result) : chalk.red(result))
+        console.log(result.ok ? chalk.green(result) : chalk.red(request.statusText))
     }
 
     console.log(chalk.blue('Récupération de la liste des joueurs FR...'))
@@ -60,7 +58,8 @@ import chalk from 'chalk'
     console.log(chalk.blue('Envoi des invitations à rejoindre le clan BSFR'))
     for(const player of players) {
         console.log(chalk.blue(`Invitation du joueur "${player.name}"`))
-        invitePlayerToClan(player)
+        await invitePlayerToClan(player)
+        await new Promise(res => setTimeout(res, 150))
     }
     console.log(chalk.green('Toutes les invitations ont bien été envoyées'))
 })()
